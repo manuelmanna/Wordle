@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="./static/js/grid.css">
+    <meta charset="utf-8">
+    <title>WORDLE</title>
+    <style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        border-bottom: 1px solid black;
+
+    }
+
+    #title {
+        font-weight: 700;
+        font-size: 36px;
+        letter-spacing: 0.2rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .letterbox {
+        width: 62px;
+        height: 62px;
+        border: 1px solid black;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    #all {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #midcontainer .row {
+
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 9px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .letterbox {
+        box-sizing: border-box;
+        width: 60px;
+        height: 60px;
+        border: 2px solid #ddd;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Helvetica, sans-serif;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    #keyboard {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button {
+        background-color: #d3d6da;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+        height: 60px;
+        width: 43px;
+        outline: none;
+        border: none;
+        padding: 0 5px;
+        margin: 2.5px;
+        font-weight: 700;
+    }
+
+    .button:hover {
+        cursor: pointer;
+    }
+
+    #enter {
+        width: 65px;
+    }
+
+    #backspace {
+        width: 65px;
+    }
+
+    header div {
+        flex: 1;
+    }
+
+    #lastcontainer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #errorletter {
+        position: fixed;
+        width: 100%;
+        text-align: center;
+        color: red;
+        background-color: black;
+        padding: 8px 8px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="errorletter" class="hidden">
+        <h2>Non abbastanza lettere</h2>
+    </div>
+    <section id="all" class="container">
+        <header>
+            <div>
+                <a href=""><img src="./images/interrogativo.svg"></a>
+            </div>
+            <div>
+                <h1 id="title">WORDLE</h1>
+            </div>
+            <div id="lastcontainer">
+                <a href="#"><img src="./images/classifica.svg"></a>
+                <a href="#"><img src="./images/settings.svg"></a>
+            </div>
+        </header>
+        <div>
+            <div id="midcontainer">
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                    <div class="letterbox">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="keyboard">
+            <button class="button Q">Q</button>
+            <button class="button W">W</button>
+            <button class="button E">E</button>
+            <button class="button R">R</button>
+            <button class="button T">T</button>
+            <button class="button Y">Y</button>
+            <button class="button U">U</button>
+            <button class="button I">I</button>
+            <button class="button O">O</button>
+            <button class="button P">P</button>
+            <button class="button A">A</button>
+            <button class="button S">S</button>
+            <button class="button D">D</button>
+            <button class="button F">F</button>
+            <button class="button G">G</button>
+            <button class="button H">H</button>
+            <button class="button J">J</button>
+            <button class="button K">K</button>
+            <button class="button L">L</button>
+            <button class="button enter" id="enter">ENTER</button>
+            <button class="button Z">Z</button>
+            <button class="button X">X</button>
+            <button class="button C">C</button>
+            <button class="button V">V</button>
+            <button class="button B">B</button>
+            <button class="button N">N</button>
+            <button class="button M">M</button>
+            <button class="button delete" id="backspace"><img src="./images/backspace.svg"></button>
+        </div>
+    </section>
+    <script type="text/javascript">
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+    let index = 0;
+    let word = [];
+    let erroreletter = document.querySelector("#errorletter")
+    let vocabulary = ["citta", "treno", "isdft", "pausa"]
+    let chosenword = vocabulary[0]
+
+    let selectedWord = vocabulary[getRandomInt(0, vocabulary.length - 1)]
+
+    function fillLetter(value) {
+        /* RIEMPIRE LA LETTERA CORRENTE */
+        // [ "", "", "", "", "" ]
+        word[index] = value
+
+        let currentRow = document.querySelectorAll('.row')[0]
+
+        currentRow.children[index].innerHTML = value
+        index++
+    }
+
+    function checkWord() {
+        let parolauser = ""
+        if (word.length === 5) {
+            for (let i = 0; i < word.length; i++) {
+                parolauser = parolauser + word[i]
+            }
+            if (parolauser.toUpperCase() === chosenword.toUpperCase()) {
+                console.log("TROVATA")
+            } else {
+                console.log("NON TROVATA RIPROVA")
+            }
+        } else {
+            errorletter.classList.remove("hidden")
+            setTimeout(function() {
+                erroreletter.classList.add("hidden")
+            }, 1250)
+        }
+
+    }
+
+    function eraseLetter() {
+        // cancella l'ultima lettera inserita e aggiorna la riga
+        if (index > 0) {
+            index--
+            let currentRow = document.querySelectorAll('.row')[0]
+            word.pop()
+            currentRow.children[index].innerHTML = " "
+        }
+
+
+
+    }
+
+    function checkinput(event) {
+        let inseribile = true
+        if (event >= 65 && event <= 90 || event === 13 || event === 8) {
+            return inseribile
+        } else {
+            inseribile = false
+            return inseribile
+        }
+    }
+    document.addEventListener('keydown', function(e) {
+        erroreletter.classList.add("hidden")
+        if (checkinput(e.keyCode)) {
+            if (e.key === 'Enter') {
+                checkWord()
+            } else if (e.key === 'Backspace') {
+                eraseLetter()
+            } else if (index < 5) {
+                fillLetter(e.key)
+            }
+        }
+
+    });
+    </script>
+</body>
+
+</html>
