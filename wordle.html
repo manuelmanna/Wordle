@@ -267,6 +267,7 @@
     let erroreletter = document.querySelector("#errorletter")
     let vocabulary = ["citta", "treno", "isdft", "pausa"]
     let chosenword = vocabulary[0]
+    let keyboardletters = document.querySelectorAll(".button")
 
     let selectedWord = vocabulary[getRandomInt(0, vocabulary.length - 1)]
 
@@ -306,8 +307,11 @@
         if (index > 0) {
             index--
             let currentRow = document.querySelectorAll('.row')[0]
+            console.log(word)
             word.pop()
             currentRow.children[index].innerHTML = " "
+
+
         }
 
 
@@ -334,8 +338,80 @@
                 fillLetter(e.key)
             }
         }
-
     });
+    //Prova event listener per la tastiera su schermo 1.0 (sicuramente c'è un modo per migliorarlo)
+    /* 
+	Cose da risolvere:
+	-Funzione del backspace: cancella solo l'utlima lettera (solo se si usa quello della tastiera)
+
+    */
+    for (let i = 0; i < keyboardletters.length; i++) {
+        let key = keyboardletters[i]
+        key.addEventListener("click", function(e) {
+            let letterkey = ""
+            if (keyboardletters[i].classList.contains("A")) {
+                letterkey = "A"
+            } else if (keyboardletters[i].classList.contains("B")) {
+                letterkey = "B"
+            } else if (keyboardletters[i].classList.contains("C")) {
+                letterkey = "C"
+            } else if (keyboardletters[i].classList.contains("D")) {
+                letterkey = "D"
+            } else if (keyboardletters[i].classList.contains("E")) {
+                letterkey = "E"
+            } else if (keyboardletters[i].classList.contains("F")) {
+                letterkey = "F"
+            } else if (keyboardletters[i].classList.contains("G")) {
+                letterkey = "G"
+            } else if (keyboardletters[i].classList.contains("H")) {
+                letterkey = "H"
+            } else if (keyboardletters[i].classList.contains("I")) {
+                letterkey = "I"
+            } else if (keyboardletters[i].classList.contains("J")) {
+                letterkey = "J"
+            } else if (keyboardletters[i].classList.contains("K")) {
+                letterkey = "K"
+            } else if (keyboardletters[i].classList.contains("L")) {
+                letterkey = "L"
+            } else if (keyboardletters[i].classList.contains("M")) {
+                letterkey = "M"
+            } else if (keyboardletters[i].classList.contains("N")) {
+				letterkey = "N"
+            } else if (keyboardletters[i].classList.contains("O")) {
+            	letterkey = "O"
+            } else if (keyboardletters[i].classList.contains("P")) {
+				letterkey = "P"
+            } else if (keyboardletters[i].classList.contains("Q")) {
+            	letterkey = "Q"
+            } else if (keyboardletters[i].classList.contains("R")) {
+				letterkey = "R"
+            } else if (keyboardletters[i].classList.contains("S")) {
+            	letterkey = "S"
+            } else if (keyboardletters[i].classList.contains("T")) {
+            	letterkey = "T"
+            } else if (keyboardletters[i].classList.contains("U")) {
+            	letterkey = "U"
+            } else if (keyboardletters[i].classList.contains("V")) {
+            	letterkey = "V"
+            } else if (keyboardletters[i].classList.contains("W")) {
+            	letterkey = "W"
+            } else if (keyboardletters[i].classList.contains("X")) {
+            	letterkey = "X"
+            } else if (keyboardletters[i].classList.contains("Y")) {
+            	letterkey = "Y"
+            } else if (keyboardletters[i].classList.contains("Z")) {
+            	letterkey = "Z"
+            }
+            if(keyboardletters[i].classList.contains("enter")) {
+            	checkWord()
+            }else if(keyboardletters[i].classList.contains("delete")) {
+            	eraseLetter()
+            }else if(index < 5) {
+                fillLetter(letterkey)
+            }
+            
+        })
+    }
     </script>
 </body>
 
