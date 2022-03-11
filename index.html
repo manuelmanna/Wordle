@@ -38,8 +38,11 @@
         margin-bottom: 5px;
     }
 
-    #all {
+    .flex {
         display: flex;
+    }
+
+    #all {
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
@@ -127,6 +130,21 @@
         background-color: black;
         padding: 8px 8px;
     }
+
+    .yellow {
+        background-color: #c9b458;
+        border: none;
+    }
+
+    .green {
+        background-color: #6aaa64;
+        border: none;
+    }
+
+    .gray {
+        background-color: #787c7e;
+        border: none;
+    }
     </style>
 </head>
 
@@ -134,7 +152,7 @@
     <div id="errorletter" class="hidden">
         <h2>Non abbastanza lettere</h2>
     </div>
-    <section id="all" class="container">
+    <section id="all" class="container flex">
         <header>
             <div>
                 <a href=""><img src="./images/interrogativo.svg"></a>
@@ -224,34 +242,42 @@
             </div>
         </div>
         <div id="keyboard">
-            <button class="button Q">Q</button>
-            <button class="button W">W</button>
-            <button class="button E">E</button>
-            <button class="button R">R</button>
-            <button class="button T">T</button>
-            <button class="button Y">Y</button>
-            <button class="button U">U</button>
-            <button class="button I">I</button>
-            <button class="button O">O</button>
-            <button class="button P">P</button>
-            <button class="button A">A</button>
-            <button class="button S">S</button>
-            <button class="button D">D</button>
-            <button class="button F">F</button>
-            <button class="button G">G</button>
-            <button class="button H">H</button>
-            <button class="button J">J</button>
-            <button class="button K">K</button>
-            <button class="button L">L</button>
-            <button class="button enter" id="enter">ENTER</button>
-            <button class="button Z">Z</button>
-            <button class="button X">X</button>
-            <button class="button C">C</button>
-            <button class="button V">V</button>
-            <button class="button B">B</button>
-            <button class="button N">N</button>
-            <button class="button M">M</button>
-            <button class="button delete" id="backspace"><img src="./images/backspace.svg"></button>
+            <button class="button" data-letter="Q">Q</button>
+            <button class="button" data-letter="W">W</button>
+            <button class="button" data-letter="E">E</button>
+            <button class="button" data-letter="R">R</button>
+            <button class="button" data-letter="T">T</button>
+            <button class="button" data-letter="Y">Y</button>
+            <button class="button" data-letter="U">U</button>
+            <button class="button" data-letter="I">I</button>
+            <button class="button" data-letter="O">O</button>
+            <button class="button" data-letter="P">P</button>
+            <button class="button" data-letter="A">A</button>
+            <button class="button" data-letter="S">S</button>
+            <button class="button" data-letter="D">D</button>
+            <button class="button" data-letter="F">F</button>
+            <button class="button" data-letter="G">G</button>
+            <button class="button" data-letter="H">H</button>
+            <button class="button" data-letter="J">J</button>
+            <button class="button" data-letter="K">K</button>
+            <button class="button" data-letter="L">L</button>
+            <button class="button enter" id="enter" data-letter="ENTER">ENTER</button>
+            <button class="button" data-letter="Z">Z</button>
+            <button class="button" data-letter="X">X</button>
+            <button class="button" data-letter="C">C</button>
+            <button class="button" data-letter="V">V</button>
+            <button class="button" data-letter="B">B</button>
+            <button class="button" data-letter="N">N</button>
+            <button class="button" data-letter="M">M</button>
+            <button class="button delete" id="backspace" data-letter="BACKSPACE"><img src="./images/backspace.svg"></button>
+        </div>
+    </section>
+    <section id="settingspage" class="container hidden">
+        <header>
+        </header>
+        <div>
+            <di></di>
+        </div>
         </div>
     </section>
     <script type="text/javascript">
@@ -268,15 +294,16 @@
     let vocabulary = ["citta", "treno", "isdft", "pausa"]
     let chosenword = vocabulary[0]
     let keyboardletters = document.querySelectorAll(".button")
-
+    let rowindex = 0
+    let currentRow = document.querySelectorAll('.row')[rowindex]
     let selectedWord = vocabulary[getRandomInt(0, vocabulary.length - 1)]
+    let tentativi = 0
+    let trovata = false
 
     function fillLetter(value) {
-        /* RIEMPIRE LA LETTERA CORRENTE */
-        // [ "", "", "", "", "" ]
         word[index] = value
 
-        let currentRow = document.querySelectorAll('.row')[0]
+
 
         currentRow.children[index].innerHTML = value
         index++
@@ -290,23 +317,29 @@
             }
             if (parolauser.toUpperCase() === chosenword.toUpperCase()) {
                 console.log("TROVATA")
+                trovata = true
+                return true
             } else {
                 console.log("NON TROVATA RIPROVA")
+                trovata = false
+                return false
             }
         } else {
             errorletter.classList.remove("hidden")
             setTimeout(function() {
                 erroreletter.classList.add("hidden")
             }, 1250)
+            return false
         }
 
     }
 
+
+    
+
     function eraseLetter() {
-        // cancella l'ultima lettera inserita e aggiorna la riga
         if (index > 0) {
             index--
-            let currentRow = document.querySelectorAll('.row')[0]
             console.log(word)
             word.pop()
             currentRow.children[index].innerHTML = " "
@@ -327,89 +360,91 @@
             return inseribile
         }
     }
+
+    function changerow() {
+        if (rowindex < 5) {
+            rowindex++
+            currentRow = document.querySelectorAll('.row')[rowindex]
+            word = []
+            index = 0
+        }
+    }
+    function colorelettere(){
+        let uguale = false
+        for(let s = 0; s<word.length;s++){
+            let uguale = false
+            for(let f = 0; f<word.length;f++){
+                if (word[s].toUpperCase() === chosenword[f].toUpperCase()) {
+                    currentRow.children[s].classList.remove("gray")
+                    currentRow.children[s].classList.add("yellow")
+                    uguale = true
+                }else if(uguale===false){
+                    currentRow.children[s].classList.add("gray")
+                    currentRow.children[s].classList.remove("yellow")
+                }
+            }
+        }
+        for(let h = 0; h<word.length;h++){
+            if (word[h].toUpperCase() === chosenword[h].toUpperCase()) {
+                currentRow.children[h].classList.remove("yellow")
+                currentRow.children[h].classList.remove("gray")
+                currentRow.children[h].classList.add("green")
+            }
+        }
+    }
+
+    function checkwin() {
+        if (trovata) {
+            console.log("checkwin")
+        } else if (tentativi === 5) {
+            console.log("sei un pippone")
+        }
+    }
     document.addEventListener('keydown', function(e) {
         erroreletter.classList.add("hidden")
         if (checkinput(e.keyCode)) {
             if (e.key === 'Enter') {
-                checkWord()
+                if (tentativi <= 5 && trovata === false) {
+                    colorelettere()
+                    if (checkWord()) {
+                        checkwin()
+                        console.log("gioco finito GG")
+                    } else if (tentativi === 5) {
+                        checkwin()
+                    }
+                    if (word.length === 5) {
+                        tentativi++
+                        changerow()
+                    }
+                }
             } else if (e.key === 'Backspace') {
                 eraseLetter()
-            } else if (index < 5) {
+            } else if (index < 5 && trovata === false) {
                 fillLetter(e.key)
             }
         }
     });
-    //Prova event listener per la tastiera su schermo 1.0 (sicuramente c'è un modo per migliorarlo)
-    /* 
-	Cose da risolvere:
-	-Funzione del backspace: cancella solo l'utlima lettera (solo se si usa quello della tastiera)
-
-    */
     for (let i = 0; i < keyboardletters.length; i++) {
         let key = keyboardletters[i]
         key.addEventListener("click", function(e) {
-            let letterkey = ""
-            if (keyboardletters[i].classList.contains("A")) {
-                letterkey = "A"
-            } else if (keyboardletters[i].classList.contains("B")) {
-                letterkey = "B"
-            } else if (keyboardletters[i].classList.contains("C")) {
-                letterkey = "C"
-            } else if (keyboardletters[i].classList.contains("D")) {
-                letterkey = "D"
-            } else if (keyboardletters[i].classList.contains("E")) {
-                letterkey = "E"
-            } else if (keyboardletters[i].classList.contains("F")) {
-                letterkey = "F"
-            } else if (keyboardletters[i].classList.contains("G")) {
-                letterkey = "G"
-            } else if (keyboardletters[i].classList.contains("H")) {
-                letterkey = "H"
-            } else if (keyboardletters[i].classList.contains("I")) {
-                letterkey = "I"
-            } else if (keyboardletters[i].classList.contains("J")) {
-                letterkey = "J"
-            } else if (keyboardletters[i].classList.contains("K")) {
-                letterkey = "K"
-            } else if (keyboardletters[i].classList.contains("L")) {
-                letterkey = "L"
-            } else if (keyboardletters[i].classList.contains("M")) {
-                letterkey = "M"
-            } else if (keyboardletters[i].classList.contains("N")) {
-				letterkey = "N"
-            } else if (keyboardletters[i].classList.contains("O")) {
-            	letterkey = "O"
-            } else if (keyboardletters[i].classList.contains("P")) {
-				letterkey = "P"
-            } else if (keyboardletters[i].classList.contains("Q")) {
-            	letterkey = "Q"
-            } else if (keyboardletters[i].classList.contains("R")) {
-				letterkey = "R"
-            } else if (keyboardletters[i].classList.contains("S")) {
-            	letterkey = "S"
-            } else if (keyboardletters[i].classList.contains("T")) {
-            	letterkey = "T"
-            } else if (keyboardletters[i].classList.contains("U")) {
-            	letterkey = "U"
-            } else if (keyboardletters[i].classList.contains("V")) {
-            	letterkey = "V"
-            } else if (keyboardletters[i].classList.contains("W")) {
-            	letterkey = "W"
-            } else if (keyboardletters[i].classList.contains("X")) {
-            	letterkey = "X"
-            } else if (keyboardletters[i].classList.contains("Y")) {
-            	letterkey = "Y"
-            } else if (keyboardletters[i].classList.contains("Z")) {
-            	letterkey = "Z"
+            let lettera = e.currentTarget.dataset.letter
+            if (lettera === "BACKSPACE") {
+                eraseLetter()
+            } else if (lettera === "ENTER") {
+                colorelettere()
+                if (checkWord() && trovata === false) {
+                    checkwin()
+                    console.log("gioco finito GG")
+                } else if (tentativi === 5) {
+                    checkwin()
+                }
+                if (word.length === 5) {
+                    tentativi++
+                    changerow()
+                }
+            } else if (index < 5 && trovata === false) {
+                fillLetter(lettera)
             }
-            if(keyboardletters[i].classList.contains("enter")) {
-            	checkWord()
-            }else if(keyboardletters[i].classList.contains("delete")) {
-            	eraseLetter()
-            }else if(index < 5) {
-                fillLetter(letterkey)
-            }
-            
         })
     }
     </script>
