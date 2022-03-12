@@ -280,6 +280,7 @@
         </div>
         </div>
     </section>
+    <script src="./static/js/italianwords.js"></script>
     <script type="text/javascript">
     function getRandomInt(min, max) {
         min = Math.ceil(min);
@@ -291,8 +292,7 @@
     let index = 0;
     let word = [];
     let erroreletter = document.querySelector("#errorletter")
-    let vocabulary = ["citta", "treno", "isdft", "pausa"]
-    let chosenword = vocabulary[0]
+    let chosenword = vocabulary[getRandomInt(0, vocabulary.length-1)]
     let keyboardletters = document.querySelectorAll(".button")
     let rowindex = 0
     let currentRow = document.querySelectorAll('.row')[rowindex]
@@ -392,7 +392,21 @@
             }
         }
     }
-
+    
+    function existingword(){
+        let userword = ""
+        let flag = false
+        for(let i = 0;i<word.length;i++){
+            userword += word[i]
+        }
+        
+        for(let j = 0;j<vocabulary.length;j++){
+            if(userword.toUpperCase() === vocabulary[j].toUpperCase()){
+                flag = true
+            }
+        }
+        return flag
+    }
     function checkwin() {
         if (trovata) {
             console.log("checkwin")
@@ -405,17 +419,22 @@
         if (checkinput(e.keyCode)) {
             if (e.key === 'Enter') {
                 if (tentativi <= 5 && trovata === false) {
-                    colorelettere()
-                    if (checkWord()) {
-                        checkwin()
-                        console.log("gioco finito GG")
-                    } else if (tentativi === 5) {
-                        checkwin()
+                    if(existingword()){
+                            colorelettere()
+                        if (checkWord()) {
+                            checkwin()  
+                            console.log("gioco finito GG")
+                        } else if (tentativi === 5) {
+                            checkwin()
+                        }
+                        if (word.length === 5) {
+                            tentativi++
+                            changerow()
+                        }
+                    }else{
+                        console.log("inesistente")
                     }
-                    if (word.length === 5) {
-                        tentativi++
-                        changerow()
-                    }
+
                 }
             } else if (e.key === 'Backspace') {
                 eraseLetter()
@@ -431,16 +450,23 @@
             if (lettera === "BACKSPACE") {
                 eraseLetter()
             } else if (lettera === "ENTER") {
-                colorelettere()
-                if (checkWord() && trovata === false) {
-                    checkwin()
-                    console.log("gioco finito GG")
-                } else if (tentativi === 5) {
-                    checkwin()
-                }
-                if (word.length === 5) {
-                    tentativi++
-                    changerow()
+                if (tentativi <= 5 && trovata === false) {
+                    if(existingword()){
+                            colorelettere()
+                        if (checkWord()) {
+                            checkwin()  
+                            console.log("gioco finito GG")
+                        } else if (tentativi === 5) {
+                            checkwin()
+                        }
+                        if (word.length === 5) {
+                            tentativi++
+                            changerow()
+                        }
+                    }else{
+                        console.log("inesistente")
+                    }
+
                 }
             } else if (index < 5 && trovata === false) {
                 fillLetter(lettera)
