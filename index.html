@@ -3,7 +3,6 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="./static/js/grid.css">
-    <link rel="stylesheet" type="javascript" href="">
     <meta charset="utf-8">
     <title>WORDLE</title>
     <style type="text/css">
@@ -123,13 +122,18 @@
         display: none;
     }
 
-    #errorletter {
+    .errors {
         position: fixed;
-        width: 100%;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, 0);
         text-align: center;
-        color: red;
         background-color: black;
-        padding: 8px 8px;
+        padding: 10px 10px 10px 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        color: #ffffff;
+        font-size: 16px;
     }
 
     .yellow {
@@ -150,9 +154,6 @@
 </head>
 
 <body>
-    <div id="errorletter" class="hidden">
-        <h2>Non abbastanza lettere</h2>
-    </div>
     <section id="all" class="container flex">
         <header>
             <div>
@@ -168,6 +169,15 @@
         </header>
         <div>
             <div id="midcontainer">
+                <div id="errorletter" class="hidden errors">
+                    <h2>Non abbastanza lettere</h2>
+                </div>
+                <div id="errorinexistentword" class="hidden errors">
+                    <h2>La parola inserita non esiste</h2>
+                </div>
+                <div id="haiperso" class="hidden errors">
+                    <h2>Hai perso!</h2>
+                </div>
                 <div class="row">
                     <div class="letterbox">
                     </div>
@@ -293,16 +303,17 @@
     let index = 0;
     let word = [];
     let erroreletter = document.querySelector("#errorletter")
-    let chosenword = vocabulary[getRandomInt(0, vocabulary.length-1)]
+    let chosenword = vocabulary[getRandomInt(0, vocabulary.length - 1)]
     let keyboardletters = document.querySelectorAll(".button")
     let rowindex = 0
     let currentRow = document.querySelectorAll('.row')[rowindex]
     let selectedWord = vocabulary[getRandomInt(0, vocabulary.length - 1)]
     let tentativi = 0
     let trovata = false
+    let inexword = document.querySelector("#errorinexistentword")
 
     function fillLetter(value) {
-        word[index] = value
+        word[index] = value.toUpperCase()
 
 
 
@@ -317,31 +328,22 @@
                 parolauser = parolauser + word[i]
             }
             if (parolauser.toUpperCase() === chosenword.toUpperCase()) {
-                console.log("TROVATA")
                 trovata = true
                 return true
             } else {
-                console.log("NON TROVATA RIPROVA")
                 trovata = false
                 return false
             }
-        } else {
-            errorletter.classList.remove("hidden")
-            setTimeout(function() {
-                erroreletter.classList.add("hidden")
-            }, 1250)
-            return false
         }
 
     }
 
 
-    
+
 
     function eraseLetter() {
         if (index > 0) {
             index--
-            console.log(word)
             word.pop()
             currentRow.children[index].innerHTML = " "
 
@@ -370,49 +372,85 @@
             index = 0
         }
     }
-    function colorelettere(){
+
+    function colorelettere() {
         let uguale = false
-        for(let s = 0; s<word.length;s++){
+        for (let s = 0; s < word.length; s++) {
             let uguale = false
-            for(let f = 0; f<word.length;f++){
+            for (let f = 0; f < word.length; f++) {
                 if (word[s].toUpperCase() === chosenword[f].toUpperCase()) {
                     currentRow.children[s].classList.remove("gray")
                     currentRow.children[s].classList.add("yellow")
+                    for(let u = 0; u<keyboardletters.length;u++){
+                        if(word[s] === keyboardletters[u].dataset.letter){
+                            keyboardletters[u].classList.remove("gray")
+                            keyboardletters[u].classList.add("yellow")
+                        }
+                    }
                     uguale = true
-                }else if(uguale===false){
+                } else if (uguale === false) {
                     currentRow.children[s].classList.add("gray")
                     currentRow.children[s].classList.remove("yellow")
+                    for(let u = 0; u<keyboardletters.length;u++){
+                        if(word[s] === keyboardletters[u].dataset.letter){
+                            keyboardletters[u].classList.remove("yellow")
+                            keyboardletters[u].classList.add("gray")
+                        }
+                    }
                 }
             }
         }
-        for(let h = 0; h<word.length;h++){
+        for (let h = 0; h < word.length; h++) {
             if (word[h].toUpperCase() === chosenword[h].toUpperCase()) {
                 currentRow.children[h].classList.remove("yellow")
                 currentRow.children[h].classList.remove("gray")
                 currentRow.children[h].classList.add("green")
+
+                for(let u = 0; u<keyboardletters.length;u++){
+                        if(word[h] === keyboardletters[u].dataset.letter){
+                            keyboardletters[u].classList.remove("gray")
+                            keyboardletters[u].classList.remove("yellow")
+                            keyboardletters[u].classList.add("green")
+                        }
+                    }
             }
         }
     }
-    
-    function existingword(){
+
+    function existingword() {
         let userword = ""
         let flag = false
-        for(let i = 0;i<word.length;i++){
-            userword += word[i]
-        }
-        
-        for(let j = 0;j<vocabulary.length;j++){
-            if(userword.toUpperCase() === vocabulary[j].toUpperCase()){
-                flag = true
+        if (word.length === 5) {
+            for (let i = 0; i < word.length; i++) {
+                userword += word[i]
             }
+
+            for (let j = 0; j < vocabulary.length; j++) {
+                if (userword.toUpperCase() === vocabulary[j].toUpperCase()) {
+                    flag = true
+                }
+            }
+            if (flag === false) {
+                inexword.classList.remove("hidden")
+                setTimeout(function() {
+                    inexword.classList.add("hidden")
+                }, 1250)
+            }
+        } else {
+            errorletter.classList.remove("hidden")
+            setTimeout(function() {
+                erroreletter.classList.add("hidden")
+            }, 1250)
+            flag = false
         }
         return flag
     }
     function checkwin() {
+        let displayperso = document.querySelector("#haiperso")
         if (trovata) {
             console.log("checkwin")
         } else if (tentativi === 5) {
-            console.log("sei un pippone")
+            displayperso.classList.remove("hidden")
         }
     }
     document.addEventListener('keydown', function(e) {
@@ -420,10 +458,10 @@
         if (checkinput(e.keyCode)) {
             if (e.key === 'Enter') {
                 if (tentativi <= 5 && trovata === false) {
-                    if(existingword()){
-                            colorelettere()
+                    if (existingword()) {
+                        colorelettere()
                         if (checkWord()) {
-                            checkwin()  
+                            checkwin()
                             console.log("gioco finito GG")
                         } else if (tentativi === 5) {
                             checkwin()
@@ -432,10 +470,7 @@
                             tentativi++
                             changerow()
                         }
-                    }else{
-                        console.log("inesistente")
                     }
-
                 }
             } else if (e.key === 'Backspace') {
                 eraseLetter()
@@ -452,10 +487,10 @@
                 eraseLetter()
             } else if (lettera === "ENTER") {
                 if (tentativi <= 5 && trovata === false) {
-                    if(existingword()){
-                            colorelettere()
+                    if (existingword()) {
+                        colorelettere()
                         if (checkWord()) {
-                            checkwin()  
+                            checkwin()
                             console.log("gioco finito GG")
                         } else if (tentativi === 5) {
                             checkwin()
@@ -464,10 +499,7 @@
                             tentativi++
                             changerow()
                         }
-                    }else{
-                        console.log("inesistente")
                     }
-
                 }
             } else if (index < 5 && trovata === false) {
                 fillLetter(lettera)
