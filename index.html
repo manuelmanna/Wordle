@@ -122,7 +122,11 @@
         display: none;
     }
 
-    .errors {
+    .selectedletter {
+        border: 2px solid #000000;
+    }
+
+    .outputmessages {
         position: fixed;
         top: 10%;
         left: 50%;
@@ -138,17 +142,86 @@
 
     .yellow {
         background-color: #c9b458;
+        font-weight: bold;
+        color: #ffffff;
         border: none;
     }
 
     .green {
         background-color: #6aaa64;
+        font-weight: bold;
+        color: #ffffff;
         border: none;
     }
 
     .gray {
         background-color: #787c7e;
+        font-weight: bold;
+        color: #ffffff;
         border: none;
+    }
+
+    #tutorial {
+        position: fixed;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background-color: #ffffff;
+        padding: 10px 10px 10px 10px;
+        border-radius: 10px;
+        color: #000000;
+        font-size: 16px;
+        width: 500px;
+        box-shadow: 0 4px 23px 0 rgb(0 0 0 / 20%);
+    }
+
+    #tutorialcontainer {
+        padding: 20px 20px 20px 20px;
+    }
+
+    #tutorialheader {
+        text-align: end;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+
+    .tutorialtexts {
+        color: #000;
+        margin-bottom: 14px;
+    }
+
+    #tutorialcontent {
+        border-bottom: 1px solid #787c7e;
+        text-align: start;
+    }
+
+    .esempi {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .lettercontainer {
+        margin-right: 5px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        font-weight: bold;
+        font-size: 32px;
+        box-sizing: border-box;
+    }
+
+    .exampleletters {
+        border: 1px solid #787c7e;
+    }
+
+    #esempicontainer p {
+        margin-top: 14px;
+        margin-bottom: 14px;
     }
     </style>
 </head>
@@ -157,7 +230,7 @@
     <section id="all" class="container flex">
         <header>
             <div>
-                <a href=""><img src="./images/interrogativo.svg"></a>
+                <a href="#"><img src="./images/interrogativo.svg"></a>
             </div>
             <div>
                 <h1 id="title">WORDLE</h1>
@@ -169,14 +242,86 @@
         </header>
         <div>
             <div id="midcontainer">
-                <div id="errorletter" class="hidden errors">
+                <div id="tutorial" class="">
+                    <div id="tutorialcontainer">
+                        <div id="tutorialheader">
+                            <div>
+                               <a href="#"  id="tutorialclose"><img src="./images/cross.svg"></a>
+                            </div>
+                        </div>
+                        <div id="tutorialcontent">
+                            <p class="tutorialtexts">Indovina delle <strong>Parole</strong> di 5 lettere in 6 tentativi</p>
+                            <p class="tutorialtexts">Dopo ogni tentativo, i colori delle tessere cambieranno per mostrarti quanto vicino sei andato ad indovinare la parola.</p>
+                        </div>
+                        <div id="esempicontainer">
+                            <div class="esempi">
+                                <div class="lettercontainer green">
+                                    <p>P</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>I</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>Z</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>Z</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>A</p>
+                                </div>
+                            </div>
+                            <p>La lettera <strong>P</strong> è nella parola ed è nel posto giusto.</p>
+                            <div class="esempi">
+                                <div class="lettercontainer exampleletters">
+                                    <p>P</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>O</p>
+                                </div>
+                                <div class="lettercontainer yellow">
+                                    <p>R</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>T</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>A</p>
+                                </div>
+                            </div>
+                            <p>La lettera <strong>R</strong> è nella parola ma è al posto sbagliato.</p>
+                            <div class="esempi">
+                                <div class="lettercontainer exampleletters">
+                                    <p>P</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>A</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>R</p>
+                                </div>
+                                <div class="lettercontainer gray">
+                                    <p>C</p>
+                                </div>
+                                <div class="lettercontainer exampleletters">
+                                    <p>O</p>
+                                </div>
+                            </div>
+                            <p>La lettera <strong>C</strong> non è nella parola.</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="errorletter" class="hidden outputmessages">
                     <h2>Non abbastanza lettere</h2>
                 </div>
-                <div id="errorinexistentword" class="hidden errors">
+                <div id="errorinexistentword" class="hidden outputmessages">
                     <h2>La parola inserita non esiste</h2>
                 </div>
-                <div id="haiperso" class="hidden errors">
+                <div id="haiperso" class="hidden outputmessages">
                     <h2>Hai perso!</h2>
+                </div>
+                <div id="winmsg" class="hidden outputmessages">
+                    <h2>Congratulazioni! Hai Vinto!</h2>
                 </div>
                 <div class="row">
                     <div class="letterbox">
@@ -284,12 +429,10 @@
         </div>
     </section>
     <section id="settingspage" class="container hidden">
-        <header>
-        </header>
-        <div>
-            <di></di>
-        </div>
-        </div>
+        <!--Work in progress-->
+    </section>
+    <section id="helppage" class="container hidden">
+        <!--Work in progress-->
     </section>
     <script src="./static/js/italianwords.js"></script>
     <script type="text/javascript">
@@ -311,12 +454,14 @@
     let tentativi = 0
     let trovata = false
     let inexword = document.querySelector("#errorinexistentword")
+    let win = document.querySelector("#winmsg")
+    let closetutorial = document.querySelector("#tutorialclose")
 
     function fillLetter(value) {
         word[index] = value.toUpperCase()
 
 
-
+        currentRow.children[index].classList.add("selectedletter")
         currentRow.children[index].innerHTML = value
         index++
     }
@@ -346,6 +491,7 @@
             index--
             word.pop()
             currentRow.children[index].innerHTML = " "
+            currentRow.children[index].classList.remove("selectedletter")
 
 
         }
@@ -381,8 +527,8 @@
                 if (word[s].toUpperCase() === chosenword[f].toUpperCase()) {
                     currentRow.children[s].classList.remove("gray")
                     currentRow.children[s].classList.add("yellow")
-                    for(let u = 0; u<keyboardletters.length;u++){
-                        if(word[s] === keyboardletters[u].dataset.letter){
+                    for (let u = 0; u < keyboardletters.length; u++) {
+                        if (word[s] === keyboardletters[u].dataset.letter) {
                             keyboardletters[u].classList.remove("gray")
                             keyboardletters[u].classList.add("yellow")
                         }
@@ -391,8 +537,8 @@
                 } else if (uguale === false) {
                     currentRow.children[s].classList.add("gray")
                     currentRow.children[s].classList.remove("yellow")
-                    for(let u = 0; u<keyboardletters.length;u++){
-                        if(word[s] === keyboardletters[u].dataset.letter){
+                    for (let u = 0; u < keyboardletters.length; u++) {
+                        if (word[s] === keyboardletters[u].dataset.letter) {
                             keyboardletters[u].classList.remove("yellow")
                             keyboardletters[u].classList.add("gray")
                         }
@@ -406,13 +552,13 @@
                 currentRow.children[h].classList.remove("gray")
                 currentRow.children[h].classList.add("green")
 
-                for(let u = 0; u<keyboardletters.length;u++){
-                        if(word[h] === keyboardletters[u].dataset.letter){
-                            keyboardletters[u].classList.remove("gray")
-                            keyboardletters[u].classList.remove("yellow")
-                            keyboardletters[u].classList.add("green")
-                        }
+                for (let u = 0; u < keyboardletters.length; u++) {
+                    if (word[h] === keyboardletters[u].dataset.letter) {
+                        keyboardletters[u].classList.remove("gray")
+                        keyboardletters[u].classList.remove("yellow")
+                        keyboardletters[u].classList.add("green")
                     }
+                }
             }
         }
     }
@@ -445,10 +591,11 @@
         }
         return flag
     }
+
     function checkwin() {
         let displayperso = document.querySelector("#haiperso")
         if (trovata) {
-            console.log("checkwin")
+            win.classList.remove("hidden")
         } else if (tentativi === 5) {
             displayperso.classList.remove("hidden")
         }
@@ -462,7 +609,6 @@
                         colorelettere()
                         if (checkWord()) {
                             checkwin()
-                            console.log("gioco finito GG")
                         } else if (tentativi === 5) {
                             checkwin()
                         }
@@ -506,6 +652,11 @@
             }
         })
     }
+    closetutorial.addEventListener("click",function(e){
+        e.preventDefault()
+        let tutorialpage = document.querySelector("#tutorial")
+        tutorialpage.classList.add("hidden")
+    })
     </script>
 </body>
 
